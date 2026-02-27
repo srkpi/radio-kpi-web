@@ -1,7 +1,7 @@
-import { NextResponse } from "next/server";
-import { fetchMonitor } from "@/lib/betterUptime";
+import { NextResponse } from 'next/server';
+import { fetchMonitor } from '@/lib/betterUptime';
 
-export const runtime = "edge";
+export const runtime = 'edge';
 export const revalidate = 30;
 
 export async function GET() {
@@ -11,7 +11,7 @@ export async function GET() {
       return NextResponse.json({ error: 'Radio offline' }, { status: 502 });
     }
 
-    const serviceUrl = monitor.data.attributes.url.replace(/\/+$/, "");
+    const serviceUrl = monitor.data.attributes.url.replace(/\/+$/, '');
     const streamUrl = `${serviceUrl}/stream`;
 
     return new Response(null, {
@@ -21,7 +21,7 @@ export async function GET() {
       },
     });
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Unknown error";
+    const message = error instanceof Error ? error.message : 'Unknown error';
     return NextResponse.json({ error: message }, { status: 500 });
   }
 }

@@ -4,7 +4,7 @@ export interface MonitorAttributes {
   monitor_type: string;
   monitor_group_id: string;
   last_checked_at: string;
-  status: "paused" | "pending" | "maintenance" | "up" | "validating" | "down";
+  status: 'paused' | 'pending' | 'maintenance' | 'up' | 'validating' | 'down';
   policy_id: string | null;
   expiration_policy_id: string | null;
   team_name: string;
@@ -40,7 +40,7 @@ export interface MonitorAttributes {
 export interface MonitorResponse {
   data: {
     id: string;
-    type: "monitor";
+    type: 'monitor';
     attributes: MonitorAttributes;
   };
 }
@@ -51,25 +51,20 @@ export async function fetchMonitor(): Promise<MonitorResponse> {
 
   if (!token || !monitorId) {
     throw new Error(
-      "Missing required environment variables: UPTIME_API_TOKEN or UPTIME_MONITOR_ID"
+      'Missing required environment variables: UPTIME_API_TOKEN or UPTIME_MONITOR_ID',
     );
   }
 
-  const response = await fetch(
-    `https://uptime.betterstack.com/api/v2/monitors/${monitorId}`,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-      cache: "no-store",
-    }
-  );
+  const response = await fetch(`https://uptime.betterstack.com/api/v2/monitors/${monitorId}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+    cache: 'no-store',
+  });
 
   if (!response.ok) {
-    throw new Error(
-      `BetterUptime API error: ${response.status} ${response.statusText}`
-    );
+    throw new Error(`BetterUptime API error: ${response.status} ${response.statusText}`);
   }
 
   return response.json() as Promise<MonitorResponse>;

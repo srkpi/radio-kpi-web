@@ -1,7 +1,7 @@
-import { NextResponse } from "next/server";
-import { fetchMonitor } from "@/lib/betterUptime";
+import { NextResponse } from 'next/server';
+import { fetchMonitor } from '@/lib/betterUptime';
 
-export const runtime = "edge";
+export const runtime = 'edge';
 export const revalidate = 300;
 
 export async function GET() {
@@ -11,22 +11,22 @@ export async function GET() {
       return NextResponse.json({ error: 'Radio offline' }, { status: 502 });
     }
 
-    const serviceUrl = monitor.data.attributes.url.replace(/\/+$/, "");
+    const serviceUrl = monitor.data.attributes.url.replace(/\/+$/, '');
     const response = await fetch(`${serviceUrl}/statistics`, {
-      cache: "no-store",
+      cache: 'no-store',
     });
 
     if (!response.ok) {
       return NextResponse.json(
         { error: `Service responded with ${response.status} ${response.statusText}` },
-        { status: response.status }
+        { status: response.status },
       );
     }
 
     const data = await response.json();
     return NextResponse.json(data, { status: response.status });
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Unknown error";
+    const message = error instanceof Error ? error.message : 'Unknown error';
     return NextResponse.json({ error: message }, { status: 500 });
   }
 }

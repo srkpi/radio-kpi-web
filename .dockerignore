@@ -40,6 +40,8 @@ coverage
 *.md
 *.log
 *.tsbuildinfo
+.prettierignore
+.prettierrc
 
 # IDE / OS
 .vscode
