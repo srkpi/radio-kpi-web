@@ -6,6 +6,10 @@ export const runtime = "edge";
 export async function GET() {
   try {
     const monitor = await fetchMonitor();
+    if (monitor.data.attributes.status !== 'up') {
+      return NextResponse.json({ error: 'Radio offline' }, { status: 502 });
+    }
+
     const serviceUrl = monitor.data.attributes.url.replace(/\/+$/, "");
     const response = await fetch(`${serviceUrl}/statistics`);
 

@@ -1,3 +1,4 @@
+import { NextResponse } from "next/server";
 import { fetchMonitor } from "@/lib/betterUptime";
 
 export const runtime = "edge";
@@ -5,6 +6,10 @@ export const runtime = "edge";
 export async function GET() {
   try {
     const monitor = await fetchMonitor();
+    if (monitor.data.attributes.status !== 'up') {
+      return NextResponse.json({ error: 'Radio offline' }, { status: 502 });
+    }
+
     const serviceUrl = monitor.data.attributes.url.replace(/\/+$/, "");
     const streamUrl = `${serviceUrl}/stream`;
 
@@ -16,10 +21,6 @@ export async function GET() {
     });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unknown error";
-
-    return new Response(JSON.stringify({ error: message }), {
-      status: 500,
-      headers: { "Content-Type": "application/json" },
-    });
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
