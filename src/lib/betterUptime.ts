@@ -62,8 +62,7 @@ export async function fetchMonitor(): Promise<MonitorResponse> {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
-      // Revalidate every 30 seconds when used in Next.js fetch cache
-      next: { revalidate: 30 },
+      cache: "no-store",
     }
   );
 

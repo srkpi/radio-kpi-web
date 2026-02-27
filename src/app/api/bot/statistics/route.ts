@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { fetchMonitor } from "@/lib/betterUptime";
 
 export const runtime = "edge";
+export const revalidate = 300;
 
 export async function GET() {
   try {
@@ -11,7 +12,9 @@ export async function GET() {
     }
 
     const serviceUrl = monitor.data.attributes.url.replace(/\/+$/, "");
-    const response = await fetch(`${serviceUrl}/statistics`);
+    const response = await fetch(`${serviceUrl}/statistics`, {
+      cache: "no-store",
+    });
 
     if (!response.ok) {
       return NextResponse.json(
