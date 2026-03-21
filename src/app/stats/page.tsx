@@ -2,16 +2,9 @@ import { Navbar } from '@/components/navbar';
 import { StatCard } from '@/components/stat-card';
 import { TopSongs } from '@/components/top-songs';
 import { MonthlyChart, HourlyChart, WeekdayChart } from '@/components/charts';
-import { processStats } from '@/lib/processStats';
-import { RawStats } from '@/lib/types';
+import { getStats } from '@/lib/getStats';
 
-async function getStats() {
-  const res = await fetch('https://radio-kpi-web.vercel.app/api/bot/statistics', {
-    next: { revalidate: 3600 },
-  });
-  const raw: RawStats = await res.json();
-  return processStats(raw);
-}
+export const revalidate = 0;
 
 export default async function StatsPage() {
   const data = await getStats();
