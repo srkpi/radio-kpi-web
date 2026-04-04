@@ -1,21 +1,27 @@
-import { Navbar } from '@/components/navbar'
-import { StatCard } from '@/components/stat-card'
-import { TopSongs } from '@/components/top-songs'
-import { MonthlyChart, HourlyChart, WeekdayChart } from '@/components/charts'
-import { getStats } from '@/lib/getStats'
+import { Navbar } from '@/components/navbar';
+import { StatCard } from '@/components/stat-card';
+import { TopSongs } from '@/components/top-songs';
+import { MonthlyChart, HourlyChart, WeekdayChart } from '@/components/charts';
+import { StatusBadge } from '@/components/status-badge';
+import { getStats } from '@/lib/getStats';
+import { fetchMonitor } from '@/lib/betterUptime';
 
-export const revalidate = 0
+export const revalidate = 0;
 
 export default async function StatsPage() {
-  const data = await getStats()
+  const [data, monitor] = await Promise.all([getStats(), fetchMonitor()]);
+  const status = monitor.data.attributes.status;
 
   return (
     <div className="min-h-screen bg-background text-foreground">
       <Navbar />
       <main className="max-w-screen-xl mx-auto px-10 pb-20">
-        <header className="py-16">
-          <p className="text-sm text-foreground/60 tracking-widest mb-4">— Статистика</p>
-          <h1 className="font-display text-7xl font-black tracking-tighter leading-[0.95] mb-4">
+        <header className="py-16 flex flex-col gap-4">
+          <div className="flex items-center justify-between">
+            <p className="text-sm text-foreground/60 tracking-widest">— Статистика</p>
+            <StatusBadge status={status} />
+          </div>
+          <h1 className="font-display text-7xl font-black tracking-tighter leading-[0.95]">
             Вся&nbsp;історія
             <br />
             в&nbsp;цифрах
@@ -62,5 +68,5 @@ export default async function StatsPage() {
         </div>
       </main>
     </div>
-  )
+  );
 }
